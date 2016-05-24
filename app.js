@@ -64,6 +64,7 @@ function handlePicContainerClick() {
   for (var i = 0; i < allProducts.length; i++) {
     if (event.target.alt === allProducts[i].name) {
       allProducts[i].clicks += 1;
+      updateChartArrays();
       console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
     }
   }
@@ -75,8 +76,12 @@ var data = {
   datasets: [
     {
       data: votes,
-      backgroundColor: ['blue'],
-      hoverBackgroundColor: ['purple']
+      label: 'number of clicks',
+      backgroundColor: 'blue',
+      borderColor: 'blueviolet',
+      borderWidth: 1,
+      hoverBackgroundColor: 'purple',
+      hoverBorderColor: 'black',
     }]
 };
 function drawChart() {
@@ -94,6 +99,6 @@ function drawChart() {
 function hideChart() {
   document.getElementById('chart').hidden = true;
 }
-
+document.getElementById('draw-chart').addEventListener('click', drawChart);
 picContainer.addEventListener('click', handlePicContainerClick);
 displayPics();
