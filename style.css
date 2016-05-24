@@ -1,3 +1,9 @@
-/**{
-  margin: 0 auto;
-}*/
+*{
+  color: purple;
+  /*border: 1px solid black;*/
+
+}
+img {
+  width: 30%; //30% of container
+  margin: 20px; //crate little space between img
+}
