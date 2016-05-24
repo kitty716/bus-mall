@@ -2,10 +2,12 @@ var picContainer = document.getElementById('pic-container');
 var left = document.getElementById('left');
 var center = document.getElementById('center');
 var right = document.getElementById('right');
+var totalClicks = 0;
 var allProducts = [];
 
 var chartDrawn = false;
 var votes = [];
+var showns = [];
 var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'pet_sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
 
 function Product(name) {
@@ -51,6 +53,7 @@ function displayPics() {
 function updateChartArrays() {
   for (var i = 0; i < allProducts.length; i++) {
     votes[i] = allProducts[i].clicks;
+    showns[i] = allProducts[i].views;
   }
 }
 
@@ -64,13 +67,18 @@ function handlePicContainerClick() {
   for (var i = 0; i < allProducts.length; i++) {
     if (event.target.alt === allProducts[i].name) {
       allProducts[i].clicks += 1;
-      updateChartArrays();
       console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
     }
   }
+  totalClicks += 1;
+  if (totalClicks === 25) {
+    picContainer.removeEventListener('click', handlePicContainerClick);
+    document.getElementById('draw-chart').hidden = false;
+    updateChartArrays();
+  }
   displayPics();
 }
-// Chart!!!
+// Chart!!! two data set: votes and showns
 var data = {
   labels: picNames,
   datasets: [
@@ -82,11 +90,20 @@ var data = {
       borderWidth: 1,
       hoverBackgroundColor: 'purple',
       hoverBorderColor: 'black',
-    }]
+    }, {
+      data: showns,
+      label: 'number of product shown',
+      backgroundColor: 'pink',
+      borderColor: 'blueviolet',
+      borderWidth: 1,
+      hoverBackgroundColor: 'orangered',
+      hoverBorderColor: 'black',
+    }
+  ]
 };
 function drawChart() {
-  var c = document.getElementById('chart').getContext('2d');
-  var voteChart = new Chart(c,{
+  var ctx = document.getElementById('chart').getContext('2d');
+  var voteChart = new Chart(ctx,{
     type: 'bar',
     data: data,
     options: {
@@ -99,6 +116,7 @@ function drawChart() {
 function hideChart() {
   document.getElementById('chart').hidden = true;
 }
+document.getElementById('draw-chart').hidden = true;
 document.getElementById('draw-chart').addEventListener('click', drawChart);
 picContainer.addEventListener('click', handlePicContainerClick);
 displayPics();
