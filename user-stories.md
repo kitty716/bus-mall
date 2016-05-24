@@ -2,7 +2,7 @@
 <!-- 4-5 user stories for each role.'user stories' commit that is in place before any code is written. -->
 #==the marketing research team==
 == I would like to have counter for number of "clicks" per each image.
---- I would like to have counter for number of "shown" to user per each image.
+== I would like to have counter for number of "shown" to user per each image.
 --- I would like to have counter for totalClicks.
 
 #==the developer==
