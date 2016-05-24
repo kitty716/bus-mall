@@ -2,10 +2,11 @@ var picContainer = document.getElementById('pic-container');
 var left = document.getElementById('left');
 var center = document.getElementById('center');
 var right = document.getElementById('right');
-
 var allProducts = [];
 
-var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
+var chartDrawn = false;
+var votes = [];
+var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'pet_sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
 
 function Product(name) {
   this.name = name;
@@ -46,6 +47,13 @@ function displayPics() {
   allProducts[rightIndex].views += 1;
   // console.log(allProducts[rightIndex].name + ' has been shown ' + allProducts[rightIndex].views + ' times');
 }
+
+function updateChartArrays() {
+  for (var i = 0; i < allProducts.length; i++) {
+    votes[i] = allProducts[i].clicks;
+  }
+}
+
 function handlePicContainerClick() {
   // console.log(event.target);
   if(event.target.id === 'pic-container') {

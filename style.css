@@ -1,9 +1,17 @@
 *{
   color: purple;
-  /*border: 1px solid black;*/
+  border: 1px solid black;//help during work
 
 }
 img {
   width: 30%; //30% of container
-  margin: 20px; //crate little space between img
+  margin: 20px; //crate little space between img*/
+}
+
+button {
+  background-color: purple;
+  color: white;
+  border-radius: 80px;
+  font-size: 1.6em;
+  margin-left: 30%;
 }
