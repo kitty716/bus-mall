@@ -1,61 +1,65 @@
-var names = ['bag.jpg', 'banana.jpg', 'bathroom.jpg','boots.jpg','breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png','tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
+var picContainer = document.getElementById('pic-container');
+var left = document.getElementById('left');
+var center = document.getElementById('center');
+var right = document.getElementById('right');
 
-var imageID =   [document.getElementById('image1'),document.getElementById('image2'),document.getElementById('image3')];
+var allProducts = [];
 
-AllImage = [];
+var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
 
-function Image(name){
-  this.nameImg = name;
-  this.filepath = 'bm-img/' + name;
-  this.shown = 0;
-  this.clicked = 0;
-  AllImage.push(this);
-  console.log(this);
-};
-function createObj() {
-  for (var i = 0; i < names.length; i++) {
-    var newImg = new Image(names[i]);
+function Product(name) {
+  this.name = name;
+  this.views = 0;
+  this.clicks = 0;
+  this.path = 'img/' + name + '.jpg';
+}
+for (var i = 0; i < picNames.length; i++) {
+  allProducts.push(new Product(picNames[i]));
+}
+function randNum(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+function displayPics() {
+  var leftIndex = randNum(0, allProducts.length);
+  left.src = allProducts[leftIndex].path;
+  left.alt = allProducts[leftIndex].name;
+  allProducts[leftIndex].views += 1;
+  // console.log(allProducts[leftIndex].name + ' has been shown ' + allProducts[leftIndex].views + ' times');
+
+  var centerIndex = randNum(0, allProducts.length);
+  while (centerIndex === leftIndex) {
+    // console.log('duplicate found between center and left');
+    var centerIndex = randNum(0, allProducts.length);
   }
-}
-//Returns a random integer between min (included) and max (excluded)
-//var random = Math.floor(Math.random() * (max - min)) + min;
-function OutputImg(imgId) {
-  var random = Math.floor(Math.random() * names.length);
-  console.log(random);
-  //using random to access array
-  var shownImgPath = AllImage[random].filepath;
-  console.log(shownImgPath);
-  //assign path value to src
-  imgId.src = shownImgPath;
-  //add eventListener
-  imgId.addEventListener('click', handleClick);
-}
-function handleClick(event) {
-  console.log(event.target.id);
-  //counter for clicked and shown
+  center.src = allProducts[centerIndex].path;
+  center.alt = allProducts[leftIndex].name;
+  allProducts[centerIndex].views += 1;
+  // console.log(allProducts[centerIndex].name + ' has been shown ' + allProducts[centerIndex].views + ' times');
 
-  for (var j = 0 ; j < imageID.length ; j++ ) {
-    OutputImg(imageID[j]);
-    console.log(imageID[j]);
+  var rightIndex = randNum(0, allProducts.length);
+  while (rightIndex === leftIndex || rightIndex === centerIndex) {
+    // console.log('duplicate found between center and left/right');
+    var rightIndex = randNum(0, allProducts.length);
   }
+  right.src = allProducts[rightIndex].path;
+  right.alt = allProducts[leftIndex].name;
+  allProducts[rightIndex].views += 1;
+  // console.log(allProducts[rightIndex].name + ' has been shown ' + allProducts[rightIndex].views + ' times');
 }
-//call function
-createObj();
-for (var j = 0 ; j < imageID.length ; j++ ) {
-  OutputImg(imageID[j]);
-  console.log(imageID[j]);
+function handlePicContainerClick() {
+  // console.log(event.target);
+  if(event.target.id === 'pic-container') {
+    return alert ('CLICK DIRECTLY ON THE PICTURE !!!');
+    // return alert and breakout function = no show on displayPics
+  }
+  // console.log(event.target.alt + ' was clicked');
+  for (var i = 0; i < allProducts.length; i++) {
+    if (event.target.alt === allProducts[i].name) {
+      allProducts[i].clicks += 1;
+      console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
+    }
+  }
+  displayPics();
 }
-
-// // Returns a random integer between min (included) and max (excluded)
-// function calcRandom (min, max){
-//   var random = Math.floor(Math.random() * (max - min)) + min;
-//   console.log(random);
-//   //using random to access array
-//   var shownImgPath = AllImage[random].filepath;
-//   console.log(shownImgPath);
-//   //assign path value to src
-//   var shownImg = document.getElementById('image1');
-//   //shownImg.innerHTML = '<img src="' + this.filepath + ' alt="' + this.nameImg + '" />';
-//   shownImg.src = shownImgPath;
-// };
-// calcRandom(0, names.length);
+picContainer.addEventListener('click', handlePicContainerClick);
+displayPics();
