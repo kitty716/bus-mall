@@ -69,5 +69,31 @@ function handlePicContainerClick() {
   }
   displayPics();
 }
+// Chart!!!
+var data = {
+  labels: picNames,
+  datasets: [
+    {
+      data: votes,
+      backgroundColor: ['blue'],
+      hoverBackgroundColor: ['purple']
+    }]
+};
+function drawChart() {
+  var c = document.getElementById('chart').getContext('2d');
+  var voteChart = new Chart(c,{
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: false
+    }
+  });
+  chartDrawn = true;
+}
+
+function hideChart() {
+  document.getElementById('chart').hidden = true;
+}
+
 picContainer.addEventListener('click', handlePicContainerClick);
 displayPics();
