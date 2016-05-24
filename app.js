@@ -1,6 +1,6 @@
 var names = ['bag.jpg', 'banana.jpg', 'bathroom.jpg','boots.jpg','breakfast.jpg', 'bubblegum.jpg', 'chair.jpg', 'cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg', 'pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.png','tauntaun.jpg', 'unicorn.jpg', 'usb.gif', 'water-can.jpg', 'wine-glass.jpg'];
 
-var imageID = [document.getElementById('image1'),document.getElementById('image2'),document.getElementById('image3')];
+var imageID =   [document.getElementById('image1'),document.getElementById('image2'),document.getElementById('image3')];
 
 AllImage = [];
 
@@ -27,6 +27,17 @@ function OutputImg(imgId) {
   console.log(shownImgPath);
   //assign path value to src
   imgId.src = shownImgPath;
+  //add eventListener
+  imgId.addEventListener('click', handleClick);
+}
+function handleClick(event) {
+  console.log(event.target.id);
+  //counter for clicked and shown
+
+  for (var j = 0 ; j < imageID.length ; j++ ) {
+    OutputImg(imageID[j]);
+    console.log(imageID[j]);
+  }
 }
 //call function
 createObj();
