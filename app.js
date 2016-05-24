@@ -15,17 +15,17 @@ function createObj() {
     var newImg = new Image(names[i]);
   }
 }
-// function calcRandom (min, max){
-//   var random = Math.floor(Math.random() * (max - min + 1)) + min;
-//   console.log(random);
-//   //using random to access array
-//   var shownImgPath = AllImage[random].filepath;
-//   console.log(shownImgPath);
-//   //assign path value to src
-//   var shownImg = document.getElementById('image1');
-//   //'<img src="img/' + this.username + '.jpg"> <b>'
-//   //shownImg.innerHTML = '<img src="' + this.filepath + ' alt="' + this.nameImg + '" />';
-//   shownImg.src = shownImgPath;
-// };
+// Returns a random integer between min (included) and max (excluded)
+function calcRandom (min, max){
+  var random = Math.floor(Math.random() * (max - min)) + min;
+  console.log(random);
+  //using random to access array
+  var shownImgPath = AllImage[random].filepath;
+  console.log(shownImgPath);
+  //assign path value to src
+  var shownImg = document.getElementById('image1');
+  //shownImg.innerHTML = '<img src="' + this.filepath + ' alt="' + this.nameImg + '" />';
+  shownImg.src = shownImgPath;
+};
 createObj();
-//calcRandom(0, names.length);
+calcRandom(0, names.length);
