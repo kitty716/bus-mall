@@ -1,3 +1,4 @@
+// ---!!! change totalClicks back to 25!!!---
 var picContainer = document.getElementById('pic-container');
 var left = document.getElementById('left');
 var center = document.getElementById('center');
@@ -16,12 +17,15 @@ function Product(name) {
   this.clicks = 0;
   this.path = 'img/' + name + '.jpg';
 }
+
 for (var i = 0; i < picNames.length; i++) {
   allProducts.push(new Product(picNames[i]));
 }
+
 function randNum(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
 function displayPics() {
   var leftIndex = randNum(0, allProducts.length);
   left.src = allProducts[leftIndex].path;
@@ -34,6 +38,7 @@ function displayPics() {
     // console.log('duplicate found between center and left');
     var centerIndex = randNum(0, allProducts.length);
   }
+
   center.src = allProducts[centerIndex].path;
   center.alt = allProducts[leftIndex].name;
   allProducts[centerIndex].views += 1;
@@ -71,7 +76,8 @@ function handlePicContainerClick() {
     }
   }
   totalClicks += 1;
-  if (totalClicks === 25) {
+  localStorage.setItem('allData', JSON.stringify(allProducts));
+  if (totalClicks === 3) {
     picContainer.removeEventListener('click', handlePicContainerClick);
     document.getElementById('draw-chart').hidden = false;
     updateChartArrays();
@@ -116,7 +122,18 @@ function drawChart() {
 function hideChart() {
   document.getElementById('chart').hidden = true;
 }
+
 document.getElementById('draw-chart').hidden = true;
 document.getElementById('draw-chart').addEventListener('click', drawChart);
 picContainer.addEventListener('click', handlePicContainerClick);
-displayPics();
+(function(){
+  if(localStorage.allData) {
+    var lsData = JSON.parse(localStorage.getItem('allData'));
+    for (var i = 0; i < allProducts.length; i++) {
+      allProducts[i] = lsData[i];
+    }
+    displayPics();
+  } else {
+    displayPics();
+  }
+})();
