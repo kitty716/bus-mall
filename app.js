@@ -9,6 +9,7 @@ var allProducts = [];
 var chartDrawn = false;
 var votes = [];
 var showns = [];
+var rates = []; // clicks / views = rates
 var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'pet_sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
 
 function Product(name) {
@@ -59,7 +60,9 @@ function updateChartArrays() {
   for (var i = 0; i < allProducts.length; i++) {
     votes[i] = allProducts[i].clicks;
     showns[i] = allProducts[i].views;
+    rates[i] = votes[i] / showns[i];
   }
+  console.log(rates);
 }
 
 function handlePicContainerClick() {
