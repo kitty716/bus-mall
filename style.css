@@ -1,7 +1,27 @@
 *{
-  color: purple;
-  border: 1px solid black;//help during work
+  margin: 0 auto;
+  width: 90%;
+  /*border: 1px solid black;//help during work*/
+}
 
+body {
+  background-color: black;
+}
+#pic-container {
+  background-color: white;
+}
+h1 {
+  text-align: center;
+  text-decoration: underline;
+  color: orangered;
+  padding-top: 50px;
+  padding-bottom: 30px;
+}
+
+h2 {
+  text-align: center;
+  color: white;
+  padding-bottom: 50px;
 }
 img {
   width: 30%; //30% of container
@@ -11,7 +31,12 @@ img {
 button {
   background-color: purple;
   color: white;
-  border-radius: 80px;
-  font-size: 1.6em;
-  margin-left: 30%;
+  font-weight: bold;
+  font-size: 1.3em;
+  padding: 16px 20px 16px 20px;
+  width: 90%;
+  border-radius: 90px;
+  cursor: pointer;
+  margin-left: 5%;
+
 }
