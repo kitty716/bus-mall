@@ -2,10 +2,13 @@ var picContainer = document.getElementById('pic-container');
 var left = document.getElementById('left');
 var center = document.getElementById('center');
 var right = document.getElementById('right');
-
+var totalClicks = 0;
 var allProducts = [];
 
-var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
+var chartDrawn = false;
+var votes = [];
+var showns = [];
+var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'pet_sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
 
 function Product(name) {
   this.name = name;
@@ -46,6 +49,14 @@ function displayPics() {
   allProducts[rightIndex].views += 1;
   // console.log(allProducts[rightIndex].name + ' has been shown ' + allProducts[rightIndex].views + ' times');
 }
+
+function updateChartArrays() {
+  for (var i = 0; i < allProducts.length; i++) {
+    votes[i] = allProducts[i].clicks;
+    showns[i] = allProducts[i].views;
+  }
+}
+
 function handlePicContainerClick() {
   // console.log(event.target);
   if(event.target.id === 'pic-container') {
@@ -59,7 +70,53 @@ function handlePicContainerClick() {
       console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
     }
   }
+  totalClicks += 1;
+  if (totalClicks === 25) {
+    picContainer.removeEventListener('click', handlePicContainerClick);
+    document.getElementById('draw-chart').hidden = false;
+    updateChartArrays();
+  }
   displayPics();
 }
+// Chart!!! two data set: votes and showns
+var data = {
+  labels: picNames,
+  datasets: [
+    {
+      data: votes,
+      label: 'number of clicks',
+      backgroundColor: 'blue',
+      borderColor: 'blueviolet',
+      borderWidth: 1,
+      hoverBackgroundColor: 'purple',
+      hoverBorderColor: 'black',
+    }, {
+      data: showns,
+      label: 'number of product shown',
+      backgroundColor: 'pink',
+      borderColor: 'blueviolet',
+      borderWidth: 1,
+      hoverBackgroundColor: 'orangered',
+      hoverBorderColor: 'black',
+    }
+  ]
+};
+function drawChart() {
+  var ctx = document.getElementById('chart').getContext('2d');
+  var voteChart = new Chart(ctx,{
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: false
+    }
+  });
+  chartDrawn = true;
+}
+
+function hideChart() {
+  document.getElementById('chart').hidden = true;
+}
+document.getElementById('draw-chart').hidden = true;
+document.getElementById('draw-chart').addEventListener('click', drawChart);
 picContainer.addEventListener('click', handlePicContainerClick);
 displayPics();
