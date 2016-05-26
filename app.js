@@ -1,4 +1,4 @@
-// ---!!! change totalClicks back to 25!!!---
+
 var picContainer = document.getElementById('pic-container');
 var left = document.getElementById('left');
 var center = document.getElementById('center');
@@ -32,62 +32,53 @@ function displayPics() {
   left.src = allProducts[leftIndex].path;
   left.alt = allProducts[leftIndex].name;
   allProducts[leftIndex].views += 1;
-  // console.log(allProducts[leftIndex].name + ' has been shown ' + allProducts[leftIndex].views + ' times');
 
   var centerIndex = randNum(0, allProducts.length);
   while (centerIndex === leftIndex) {
-    // console.log('duplicate found between center and left');
     var centerIndex = randNum(0, allProducts.length);
   }
 
   center.src = allProducts[centerIndex].path;
   center.alt = allProducts[leftIndex].name;
   allProducts[centerIndex].views += 1;
-  // console.log(allProducts[centerIndex].name + ' has been shown ' + allProducts[centerIndex].views + ' times');
 
   var rightIndex = randNum(0, allProducts.length);
   while (rightIndex === leftIndex || rightIndex === centerIndex) {
-    // console.log('duplicate found between center and left/right');
     var rightIndex = randNum(0, allProducts.length);
   }
   right.src = allProducts[rightIndex].path;
   right.alt = allProducts[leftIndex].name;
   allProducts[rightIndex].views += 1;
-  // console.log(allProducts[rightIndex].name + ' has been shown ' + allProducts[rightIndex].views + ' times');
 }
 
 function updateChartArrays() {
   for (var i = 0; i < allProducts.length; i++) {
     votes[i] = allProducts[i].clicks;
     showns[i] = allProducts[i].views;
-    rates[i] = votes[i] / showns[i];
+    rates[i] = parseFloat((votes[i] / showns[i] * 100).toFixed(2));
   }
-  console.log(rates);
 }
 
 function handlePicContainerClick() {
-  // console.log(event.target);
   if(event.target.id === 'pic-container') {
-    return alert ('CLICK DIRECTLY ON THE PICTURE !!!');
-    // return alert and breakout function = no show on displayPics
+    return alert ('CLICK DIRECTLY ON THE PICTURE !!!'); // return alert and breakout function = no show on displayPics
   }
-  // console.log(event.target.alt + ' was clicked');
   for (var i = 0; i < allProducts.length; i++) {
     if (event.target.alt === allProducts[i].name) {
       allProducts[i].clicks += 1;
-      console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
+      //console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
     }
   }
   totalClicks += 1;
   localStorage.setItem('allData', JSON.stringify(allProducts));
-  if (totalClicks === 3) {
+  if (totalClicks === 25) {
     picContainer.removeEventListener('click', handlePicContainerClick);
     document.getElementById('draw-chart').hidden = false;
     updateChartArrays();
   }
   displayPics();
 }
-// Chart!!! two data set: votes and showns
+// Chart!!! two data set: votes and rates
 var data = {
   labels: picNames,
   datasets: [
@@ -100,8 +91,8 @@ var data = {
       hoverBackgroundColor: 'purple',
       hoverBorderColor: 'black',
     }, {
-      data: showns,
-      label: 'number of product shown',
+      data: rates,
+      label: 'rate of clicked over shown (%)',
       backgroundColor: 'pink',
       borderColor: 'blueviolet',
       borderWidth: 1,
@@ -129,6 +120,7 @@ function hideChart() {
 document.getElementById('draw-chart').hidden = true;
 document.getElementById('draw-chart').addEventListener('click', drawChart);
 picContainer.addEventListener('click', handlePicContainerClick);
+
 (function(){
   if(localStorage.allData) {
     var lsData = JSON.parse(localStorage.getItem('allData'));
