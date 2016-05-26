@@ -1,7 +1,5 @@
 Repo bus-mall
 
-branch: bm-05-24
+branch: bm-05-25
 
-To add chart with chart.js
-
-BusMall whose product is similar to the SkyMall
+to Give BusMall app persistence by using local storage to store your voting data! The goal is to have all of your data persist through a page refresh or through completely closing the browser.

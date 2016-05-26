@@ -1,3 +1,4 @@
+
 var picContainer = document.getElementById('pic-container');
 var left = document.getElementById('left');
 var center = document.getElementById('center');
@@ -8,6 +9,7 @@ var allProducts = [];
 var chartDrawn = false;
 var votes = [];
 var showns = [];
+var rates = []; // clicks / views = rates
 var picNames = ['bag','banana','bathroom','boots','breakfast','bubblegum', 'chair', 'cthulhu', 'dog_duck', 'dragon', 'pen', 'pet_sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water_can', 'wine_glass'];
 
 function Product(name) {
@@ -16,61 +18,59 @@ function Product(name) {
   this.clicks = 0;
   this.path = 'img/' + name + '.jpg';
 }
+
 for (var i = 0; i < picNames.length; i++) {
   allProducts.push(new Product(picNames[i]));
 }
+
 function randNum(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
 function displayPics() {
   var leftIndex = randNum(0, allProducts.length);
   left.src = allProducts[leftIndex].path;
   left.alt = allProducts[leftIndex].name;
   allProducts[leftIndex].views += 1;
-  // console.log(allProducts[leftIndex].name + ' has been shown ' + allProducts[leftIndex].views + ' times');
 
   var centerIndex = randNum(0, allProducts.length);
   while (centerIndex === leftIndex) {
-    // console.log('duplicate found between center and left');
     var centerIndex = randNum(0, allProducts.length);
   }
+
   center.src = allProducts[centerIndex].path;
   center.alt = allProducts[leftIndex].name;
   allProducts[centerIndex].views += 1;
-  // console.log(allProducts[centerIndex].name + ' has been shown ' + allProducts[centerIndex].views + ' times');
 
   var rightIndex = randNum(0, allProducts.length);
   while (rightIndex === leftIndex || rightIndex === centerIndex) {
-    // console.log('duplicate found between center and left/right');
     var rightIndex = randNum(0, allProducts.length);
   }
   right.src = allProducts[rightIndex].path;
   right.alt = allProducts[leftIndex].name;
   allProducts[rightIndex].views += 1;
-  // console.log(allProducts[rightIndex].name + ' has been shown ' + allProducts[rightIndex].views + ' times');
 }
 
 function updateChartArrays() {
   for (var i = 0; i < allProducts.length; i++) {
     votes[i] = allProducts[i].clicks;
     showns[i] = allProducts[i].views;
+    rates[i] = parseFloat((votes[i] / showns[i] * 100).toFixed(2));
   }
 }
 
 function handlePicContainerClick() {
-  // console.log(event.target);
   if(event.target.id === 'pic-container') {
-    return alert ('CLICK DIRECTLY ON THE PICTURE !!!');
-    // return alert and breakout function = no show on displayPics
+    return alert ('CLICK DIRECTLY ON THE PICTURE !!!'); // return alert and breakout function = no show on displayPics
   }
-  // console.log(event.target.alt + ' was clicked');
   for (var i = 0; i < allProducts.length; i++) {
     if (event.target.alt === allProducts[i].name) {
       allProducts[i].clicks += 1;
-      console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
+      //console.log(allProducts[i].name + ' has ' + allProducts[i].clicks + ' clicks');
     }
   }
   totalClicks += 1;
+  localStorage.setItem('allData', JSON.stringify(allProducts));
   if (totalClicks === 25) {
     picContainer.removeEventListener('click', handlePicContainerClick);
     document.getElementById('draw-chart').hidden = false;
@@ -78,7 +78,7 @@ function handlePicContainerClick() {
   }
   displayPics();
 }
-// Chart!!! two data set: votes and showns
+// Chart!!! two data set: votes and rates
 var data = {
   labels: picNames,
   datasets: [
@@ -91,8 +91,8 @@ var data = {
       hoverBackgroundColor: 'purple',
       hoverBorderColor: 'black',
     }, {
-      data: showns,
-      label: 'number of product shown',
+      data: rates,
+      label: 'rate of clicked over shown (%)',
       backgroundColor: 'pink',
       borderColor: 'blueviolet',
       borderWidth: 1,
@@ -116,7 +116,19 @@ function drawChart() {
 function hideChart() {
   document.getElementById('chart').hidden = true;
 }
+
 document.getElementById('draw-chart').hidden = true;
 document.getElementById('draw-chart').addEventListener('click', drawChart);
 picContainer.addEventListener('click', handlePicContainerClick);
-displayPics();
+
+(function(){
+  if(localStorage.allData) {
+    var lsData = JSON.parse(localStorage.getItem('allData'));
+    for (var i = 0; i < allProducts.length; i++) {
+      allProducts[i] = lsData[i];
+    }
+    displayPics();
+  } else {
+    displayPics();
+  }
+})();
