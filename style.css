@@ -40,6 +40,8 @@ button {
   margin-left: 5%;
 
 }
-#chart {
+
+canvas {
+  margin-left: 5%;
   padding-top: 50px;
 }
