@@ -79,7 +79,7 @@ function handlePicContainerClick() {
   displayPics();
 }
 // Chart!!! two data set: votes and rates
-var data = {
+var data1 = {
   labels: picNames,
   datasets: [
     {
@@ -90,7 +90,13 @@ var data = {
       borderWidth: 1,
       hoverBackgroundColor: 'purple',
       hoverBorderColor: 'black',
-    }, {
+    },
+  ]
+};
+var data2 = {
+  labels: picNames,
+  datasets: [
+    {
       data: rates,
       label: 'rate of clicked over shown (%)',
       backgroundColor: 'pink',
@@ -98,23 +104,36 @@ var data = {
       borderWidth: 1,
       hoverBackgroundColor: 'orangered',
       hoverBorderColor: 'black',
-    }
+    },
   ]
 };
 function drawChart() {
-  var ctx = document.getElementById('chart').getContext('2d');
-  var voteChart = new Chart(ctx,{
+  var ctx1 = document.getElementById('chart1').getContext('2d');
+  var ctx2 = document.getElementById('chart2').getContext('2d');
+  var voteChart = new Chart(ctx1,{
     type: 'bar',
-    data: data,
+    data: data1,
     options: {
       responsive: false
     }
   });
   chartDrawn = true;
+  document.getElementById('chart1').hidden = false;
+
+  var rateChart = new Chart(ctx2,{
+    type: 'bar',
+    data: data2,
+    options: {
+      responsive: false
+    }
+  });
+  chartDrawn = true;
+  document.getElementById('chart2').hidden = false;
 }
 
 function hideChart() {
-  document.getElementById('chart').hidden = true;
+  document.getElementById('chart1').hidden = true;
+  document.getElementById('chart2').hidden = true;
 }
 
 document.getElementById('draw-chart').hidden = true;
@@ -128,7 +147,9 @@ picContainer.addEventListener('click', handlePicContainerClick);
       allProducts[i] = lsData[i];
     }
     displayPics();
+    hideChart();
   } else {
     displayPics();
+    hideChart();
   }
 })();
